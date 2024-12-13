@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native';
+
 export interface EventBannerProps {
   number: string;
   title: string;
@@ -97,4 +99,11 @@ interface MonthDataPlan {
 export interface MonthSectionType {
   month: string;
   data: MonthDataPlan[];
+}
+
+export interface DaysLimitProps {
+  title: string;
+  people: number;
+  amount: number;
+  image: ImageSourcePropType | undefined;
 }

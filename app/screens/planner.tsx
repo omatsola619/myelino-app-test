@@ -10,13 +10,16 @@ import {
   Pressable,
   ActivityIndicator,
   FlatList,
+  ImageBackground,
 } from 'react-native';
 import BackBtn from '../../assets/images/back-btn.svg';
 import SearchBtn from '../../assets/images/search.svg';
 import EventBanner from '@/components/EventBanner';
 import { fetchPlans } from '@/config/fetchPlans';
-import { MonthSectionType, PlanDataType } from '@/types';
+import { DaysLimitProps, MonthSectionType, PlanDataType } from '@/types';
 import { dateArrangedData } from '@/constants/dateArrangedData';
+import { daysLimitData } from '@/data/dummyData';
+import DaysRenderItem from '@/components/DaysRenderItem';
 
 export default function Planner() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -96,6 +99,22 @@ export default function Planner() {
           </View>
 
           {/*TODO: expires in 5 days section here */}
+          <View style={styles.daysContainer}>
+            <View style={styles.daysWrp}>
+              <View style={[styles.ball2, { backgroundColor: '#C8102E' }]} />
+              <Text style={styles.daysTxt}>Expires in 5 days!</Text>
+            </View>
+            <View>
+              <FlatList
+                data={daysLimitData}
+                renderItem={DaysRenderItem}
+                keyExtractor={(item, index) => index.toString()}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.listContainer}
+              />
+            </View>
+          </View>
 
           {/*month plans here */}
           <View style={styles.months}>
@@ -281,5 +300,23 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
     left: 26,
+  },
+  daysWrp: {
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 16,
+  },
+  daysContainer: {
+    marginTop: 30,
+  },
+  daysTxt: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#C8102E',
+  },
+  listContainer: {
+    paddingHorizontal: 20,
   },
 });
