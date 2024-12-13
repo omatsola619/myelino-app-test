@@ -14,15 +14,23 @@ const DaysRenderItem = ({ item }: { item: DaysLimitProps }) => {
     >
       <View style={styles.overlay}>
         <Text style={styles.title}>{item.title}</Text>
-        <View>
-          <View style={styles.people}>
-            <People />
-            <Text style={styles.peopleTxt}>{item.people}</Text>
+        <View style={styles.full}>
+          <View style={styles.left}>
+            <View style={styles.people}>
+              <People />
+              <Text style={styles.peopleTxt}>{item.people}</Text>
+            </View>
+
+            <View style={styles.people}>
+              <Price />
+              <Text style={styles.peopleTxt}>{item.amount}</Text>
+            </View>
           </View>
 
-          <View style={styles.people}>
-            <Price />
-            <Text style={styles.peopleTxt}>{item.amount}</Text>
+          <View>
+            <View style={styles.people2}>
+              <MapPin />
+            </View>
           </View>
         </View>
       </View>
@@ -33,9 +41,6 @@ const DaysRenderItem = ({ item }: { item: DaysLimitProps }) => {
 export default DaysRenderItem;
 
 const styles = StyleSheet.create({
-  listContainer: {
-    paddingHorizontal: 10,
-  },
   itemContainer: {
     width: 160,
     height: 170,
@@ -67,8 +72,27 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 8,
   },
+  people2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    backgroundColor: '#FFFFFFB2',
+    borderRadius: 100,
+    paddingVertical: 4,
+    paddingHorizontal: 5,
+  },
   peopleTxt: {
     fontSize: 13,
     color: '#fff',
+  },
+  left: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+  full: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
