@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -20,12 +20,16 @@ import { DaysLimitProps, MonthSectionType, PlanDataType } from '@/types';
 import { dateArrangedData } from '@/constants/dateArrangedData';
 import { daysLimitData } from '@/data/dummyData';
 import DaysRenderItem from '@/components/DaysRenderItem';
+import { AuthContext } from '@/context/AuthContext';
+import { useNavigation } from 'expo-router';
 
 export default function Planner() {
   const [searchTerm, setSearchTerm] = useState('');
   const [plans, setPlans] = useState<PlanDataType | []>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { logout } = useContext(AuthContext);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const getPlans = async () => {
@@ -50,11 +54,22 @@ export default function Planner() {
   // @ts-ignore
   const transformedData = dateArrangedData(plans.monthData);
 
+  const handleLogout = async () => {
+    await logout(); // Perform logout logic
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'index' as never }], // Reset and navigate to the login screen
+    });
+  };
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <BackBtn />
+          <Pressable onPress={handleLogout}>
+            <BackBtn />
+          </Pressable>
+
           <Text style={styles.headerTxt}>Planner</Text>
           <View style={styles.empt} />
         </View>

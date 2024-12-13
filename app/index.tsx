@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   Alert,
   Image,
@@ -6,16 +6,16 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
-
 import { useNavigation } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 import { CustomInput } from '@/components/CustomInput';
 import { axiosClient } from '@/config/axiosClient';
 import { errorHandler } from '@/helpers/errorHandler';
 import { useForm } from '@/hooks/useForm';
 import Logo from '../assets/images/logo.png';
+import { AuthContext } from '@/context/AuthContext';
 
 export default function HomeScreen() {
   const { top } = useSafeAreaInsets();
@@ -24,12 +24,26 @@ export default function HomeScreen() {
     password: '',
   });
   const navigation = useNavigation();
+  const { isAuthenticated, isAuthenticating } = useContext(AuthContext);
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'screens/planner' as never }],
+      });
+    }
+  }, [isAuthenticated, navigation]);
 
   const onPress = async () => {
     if ([identifier, password].includes('')) {
       Alert.alert('Error', 'All fields are required');
       return;
     }
+
+    setLoading(true);
 
     try {
       await axiosClient.post('/auth/sign-in', { identifier, password });
@@ -41,10 +55,20 @@ export default function HomeScreen() {
       });
     } catch (error: any) {
       const errorMessage = errorHandler(error);
-
       Alert.alert('Error', errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
+
+  // If still authenticating, show activity indicator
+  if (isAuthenticating) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#008080" />
+      </View>
+    );
+  }
 
   return (
     <View style={{ ...styles.container, paddingTop: top }}>
@@ -92,5 +116,10 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontFamily: 'RobotoBold',
     fontSize: 18,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
