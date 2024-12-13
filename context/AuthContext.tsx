@@ -15,15 +15,15 @@ export const AuthContext = createContext<AuthContextType>({
 
 const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true); // Loading state
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
 
   useEffect(() => {
     const checkCookies = async () => {
       const cookies = await AsyncStorage.getItem('cookies');
       if (cookies) {
-        setIsAuthenticated(true); // Automatically authenticate if cookies are present
+        setIsAuthenticated(true);
       }
-      setIsAuthenticating(false); // Stop loading once the check is complete
+      setIsAuthenticating(false);
     };
     checkCookies();
   }, []);

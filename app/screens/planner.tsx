@@ -6,18 +6,20 @@ import {
   SafeAreaView,
   ScrollView,
   TextInput,
-  Image,
   Pressable,
   ActivityIndicator,
   FlatList,
-  ImageBackground,
 } from 'react-native';
 import BackBtn from '../../assets/images/back-btn.svg';
 import SearchBtn from '../../assets/images/search.svg';
 import EventBanner from '@/components/EventBanner';
 import { fetchPlans } from '@/config/fetchPlans';
-import { DaysLimitProps, MonthSectionType, PlanDataType } from '@/types';
-import { dateArrangedData } from '@/constants/dateArrangedData';
+import { PlanDataType } from '@/types';
+import {
+  dateArrangedData,
+  formattedDate,
+  myGreeting,
+} from '@/constants/dateArrangedData';
 import { daysLimitData } from '@/data/dummyData';
 import DaysRenderItem from '@/components/DaysRenderItem';
 import { AuthContext } from '@/context/AuthContext';
@@ -36,7 +38,6 @@ export default function Planner() {
       try {
         const data = await fetchPlans();
         setPlans(data);
-        // console.log('all plans', data);
       } catch (e) {
         setError('error fetching plans');
       } finally {
@@ -55,7 +56,7 @@ export default function Planner() {
   const transformedData = dateArrangedData(plans.monthData);
 
   const handleLogout = async () => {
-    await logout(); // Perform logout logic
+    logout();
     navigation.reset({
       index: 0,
       routes: [{ name: 'index' as never }], // Reset and navigate to the login screen
@@ -76,8 +77,8 @@ export default function Planner() {
 
         <ScrollView style={styles.content}>
           <View style={styles.title}>
-            <Text style={styles.titleDate}>Saturday, 26 Aug</Text>
-            <Text style={styles.titleGreeting}>Good Morning</Text>
+            <Text style={styles.titleDate}>{formattedDate()}</Text>
+            <Text style={styles.titleGreeting}>{myGreeting()}</Text>
           </View>
 
           <View style={styles.searchBar}>

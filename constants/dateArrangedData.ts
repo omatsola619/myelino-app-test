@@ -28,3 +28,25 @@ export const dateArrangedData = (monthData: MonthData) => {
   }
   return result;
 };
+
+export const formattedDate = () => {
+  const date = new Date();
+
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'short',
+  }).format(date);
+};
+
+export const myGreeting = () => {
+  const hour = new Date().getHours();
+
+  if (hour < 12) {
+    return 'Good Morning';
+  } else if (hour < 18) {
+    return 'Good Afternoon';
+  } else {
+    return 'Good Evening';
+  }
+};
