@@ -24,6 +24,7 @@ import { daysLimitData } from '@/data/dummyData';
 import DaysRenderItem from '@/components/DaysRenderItem';
 import { AuthContext } from '@/context/AuthContext';
 import { useNavigation } from 'expo-router';
+import { Link } from 'expo-router';
 
 export default function Planner() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -96,7 +97,9 @@ export default function Planner() {
 
             <View style={styles.timing}>
               <Pressable style={styles.time1}>
-                <Text style={styles.timeTxt}>Quick Plans</Text>
+                <Link href="/screens/quickPlans" style={styles.timeTxt}>
+                  Quick Plans
+                </Link>
               </Pressable>
 
               <Pressable style={styles.time1}>
