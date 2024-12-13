@@ -100,37 +100,34 @@ export default function Planner() {
           {/*month plans here */}
           <View style={styles.months}>
             <View style={styles.verticalLine} />
-            <FlatList
-              data={transformedData}
-              keyExtractor={(item) => item.month}
-              renderItem={({ item: monthSection }) => (
-                <View style={styles.monthContainer}>
-                  <View style={styles.monthTxt}>
-                    <View style={styles.ball1} />
-                    <Text style={styles.monthHeader}>{monthSection.month}</Text>
-                  </View>
-
-                  {monthSection.data.map((plan, index) => (
-                    <View key={plan.id} style={styles.planContainer}>
-                      <View style={styles.planWrp}>
-                        <View style={styles.ball2} />
-                        <View style={styles.line} />
-                        <Text
-                          style={styles.planNum}
-                        >{`Plan ${index + 1}`}</Text>
-                      </View>
-                      <View style={styles.banner}>
-                        <EventBanner
-                          title={plan.description}
-                          number={plan.day}
-                          monthView
-                        />
-                      </View>
-                    </View>
-                  ))}
+            {transformedData.map((monthSection) => (
+              <View key={monthSection.month} style={styles.monthContainer}>
+                {/* Month Header with Ball */}
+                <View style={styles.monthTxt}>
+                  <View style={styles.ball1} />
+                  <Text style={styles.monthHeader}>{monthSection.month}</Text>
                 </View>
-              )}
-            />
+
+                {/* Render Plans for the Month */}
+                {monthSection.data.map((plan, index) => (
+                  <View key={plan.id} style={styles.planContainer}>
+                    {/* Plan Header with Ball and Line */}
+                    <View style={styles.planWrp}>
+                      <View style={styles.ball2} />
+                      <View style={styles.line} />
+                      <Text style={styles.planNum}>{`Plan ${index + 1}`}</Text>
+                    </View>
+                    <View style={styles.banner}>
+                      <EventBanner
+                        title={plan.description}
+                        number={plan.day}
+                        monthView
+                      />
+                    </View>
+                  </View>
+                ))}
+              </View>
+            ))}
           </View>
         </ScrollView>
       </View>
