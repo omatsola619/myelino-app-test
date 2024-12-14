@@ -7,7 +7,6 @@ import {
   ScrollView,
   TextInput,
   Pressable,
-  ActivityIndicator,
   FlatList,
   TouchableOpacity,
 } from 'react-native';
@@ -25,6 +24,7 @@ import { AuthContext } from '@/context/AuthContext';
 import { useNavigation } from 'expo-router';
 import { Link } from 'expo-router';
 import { usePlans } from '@/hooks/usePlan';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function Planner() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -172,11 +172,7 @@ export default function Planner() {
             )}
 
             {/*if the data is still in loading state display the activity indicator (a loading spinner) */}
-            {loading && (
-              <View style={styles.loader}>
-                <ActivityIndicator size="large" color={'#008080'} />
-              </View>
-            )}
+            {loading && <LoadingSpinner />}
           </View>
         </ScrollView>
       </View>
@@ -348,11 +344,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingHorizontal: 20,
-  },
-  loader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   emptyCont: {
     paddingHorizontal: 20,

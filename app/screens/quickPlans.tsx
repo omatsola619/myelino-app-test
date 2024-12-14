@@ -7,11 +7,13 @@ import {
   ScrollView,
   Pressable,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import BackBtn from '../../assets/images/back-btn.svg';
 import { useRouter } from 'expo-router';
 import { calculateDaysRemaining } from '@/constants/dateArrangedData';
 import { usePlans } from '@/hooks/usePlan';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function QuickPlans() {
   const router = useRouter();
@@ -87,6 +89,22 @@ export default function QuickPlans() {
                     </View>
                   );
                 })}
+
+              {/*if there are no plans available display this */}
+              {((plans?.quickPlans.length === 0 && !loading) || error) && (
+                <View style={styles.emptyCont}>
+                  <Text style={styles.emptyTxt}>No Quick Plans Available</Text>
+                  <TouchableOpacity
+                    style={styles.emptyBtn}
+                    onPress={refreshPlans}
+                  >
+                    <Text style={styles.emptyBtnTxt}>Reload</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              {/*if the data is still in loading state display the activity indicator (a loading spinner) */}
+              {loading && <LoadingSpinner />}
             </ScrollView>
           </View>
         </ScrollView>
@@ -228,5 +246,25 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 150,
     borderRadius: 8,
+  },
+  emptyCont: {
+    paddingHorizontal: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  emptyTxt: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  emptyBtn: {
+    marginTop: 10,
+    backgroundColor: '#008080',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderRadius: 8,
+  },
+  emptyBtnTxt: {
+    fontSize: 16,
+    color: '#fff',
   },
 });
