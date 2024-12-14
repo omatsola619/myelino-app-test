@@ -32,7 +32,7 @@ export default function Planner() {
   const navigation = useNavigation();
   const { plans, loading } = usePlans();
 
-  console.log(' BIG plans are', plans);
+  console.log(' BIG plans are', plans?.allplans);
 
   // @ts-ignore
   const transformedData = dateArrangedData(plans.monthData);
