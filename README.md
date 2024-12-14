@@ -151,7 +151,7 @@ For any issues or questions, refer to the documentation of the pre-installed pac
 ## CHALLENGES & OBSERVATIONS
 
 1. no UI to delete events or plans
-2. some data are missing or are not included in the API endpoint
+2. some data are missing or are not included in the API endpoint (used dummy data to add the Expires in 5 days data)
 3. all the data in the endpoint were removed today, thereby returning empty arrays and objects from the endpoint (not enabling me to finish the structure for the quick plan screen)
 4. no sufficient explanation for me on where to place some data seen in the api Endpoint on the UI
 5. API endpoints should be seperated (best practice) for example /plan, /events thereby enabling me to know what endpoint is for what part of the UI
