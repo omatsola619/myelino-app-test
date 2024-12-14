@@ -33,7 +33,7 @@ export default function Planner() {
   // @ts-ignore
   const { plans, loading, refreshPlans, error } = usePlans();
 
-  console.log(' BIG plans are', plans?.allplans);
+  console.log('plans:', plans);
 
   // @ts-ignore
   const transformedData = dateArrangedData(plans?.monthData);
@@ -157,6 +157,8 @@ export default function Planner() {
                   ))}
                 </View>
               ))}
+
+            {/*if there are no plans available display this */}
             {((transformedData.length === 0 && !loading) || error) && (
               <View style={styles.emptyCont}>
                 <Text style={styles.emptyTxt}>No Plans Available</Text>
@@ -168,6 +170,8 @@ export default function Planner() {
                 </TouchableOpacity>
               </View>
             )}
+
+            {/*if the data is still in loading state display the activity indicator (a loading spinner) */}
             {loading && (
               <View style={styles.loader}>
                 <ActivityIndicator size="large" color={'#008080'} />

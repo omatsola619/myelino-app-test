@@ -17,6 +17,7 @@ export const dateArrangedData = (monthData: MonthData) => {
             month,
             day,
             description: plan.place!.mainTag,
+            error: null,
           });
         });
       }
