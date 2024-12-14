@@ -9,6 +9,7 @@ import {
   Pressable,
   FlatList,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import BackBtn from '../../assets/images/back-btn.svg';
 import SearchBtn from '../../assets/images/search.svg';
@@ -25,6 +26,8 @@ import { useNavigation } from 'expo-router';
 import { Link } from 'expo-router';
 import { usePlans } from '@/hooks/usePlan';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import { StatusBar } from 'expo-status-bar';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Planner() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,7 +51,15 @@ export default function Planner() {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View style={styles.container}>
+      <StatusBar style="dark" />
+      <View
+        style={[
+          styles.container,
+          {
+            marginTop: Platform.OS === 'ios' ? 0 : 60,
+          },
+        ]}
+      >
         <View style={styles.header}>
           <Pressable onPress={handleLogout}>
             <BackBtn />

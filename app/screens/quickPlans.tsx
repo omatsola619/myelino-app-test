@@ -8,12 +8,14 @@ import {
   Pressable,
   Image,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import BackBtn from '../../assets/images/back-btn.svg';
 import { useRouter } from 'expo-router';
 import { calculateDaysRemaining } from '@/constants/dateArrangedData';
 import { usePlans } from '@/hooks/usePlan';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import { StatusBar } from 'expo-status-bar';
 
 export default function QuickPlans() {
   const router = useRouter();
@@ -24,7 +26,15 @@ export default function QuickPlans() {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View style={styles.container}>
+      <StatusBar style="dark" />
+      <View
+        style={[
+          styles.container,
+          {
+            marginTop: Platform.OS === 'ios' ? 0 : 60,
+          },
+        ]}
+      >
         <View style={styles.header}>
           <Pressable onPress={() => router.back()}>
             <BackBtn />
