@@ -9,6 +9,7 @@ import {
   Pressable,
   ActivityIndicator,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import BackBtn from '../../assets/images/back-btn.svg';
 import SearchBtn from '../../assets/images/search.svg';
@@ -27,15 +28,15 @@ import { usePlans } from '@/hooks/usePlan';
 
 export default function Planner() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [error, setError] = useState<string | null>(null);
   const { logout } = useContext(AuthContext);
   const navigation = useNavigation();
-  const { plans, loading } = usePlans();
+  // @ts-ignore
+  const { plans, loading, refreshPlans, error } = usePlans();
 
   console.log(' BIG plans are', plans?.allplans);
 
   // @ts-ignore
-  const transformedData = dateArrangedData(plans.monthData);
+  const transformedData = dateArrangedData(plans?.monthData);
 
   const handleLogout = async () => {
     logout();
@@ -44,14 +45,6 @@ export default function Planner() {
       routes: [{ name: 'index' as never }],
     });
   };
-
-  if (loading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color={'#008080'} />
-      </View>
-    );
-  }
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -106,7 +99,6 @@ export default function Planner() {
             </View>
           </View>
 
-          {/*TODO: expires in 5 days section here */}
           <View style={styles.daysContainer}>
             <View style={styles.daysWrp}>
               <View style={styles.ballWrapper}>
@@ -130,38 +122,57 @@ export default function Planner() {
           {/*month plans here */}
           <View style={styles.months}>
             <View style={styles.verticalLine} />
-            {transformedData.map((monthSection) => (
-              <View key={monthSection.month} style={styles.monthContainer}>
-                {/* Month Header with Ball */}
-                <View style={styles.monthTxt}>
-                  <View style={styles.ballWrapper}>
-                    <View style={styles.ball1} />
+            {transformedData.length !== 0 &&
+              transformedData.map((monthSection) => (
+                <View key={monthSection.month} style={styles.monthContainer}>
+                  {/* Month Header with Ball */}
+                  <View style={styles.monthTxt}>
+                    <View style={styles.ballWrapper}>
+                      <View style={styles.ball1} />
+                    </View>
+                    <Text style={styles.monthHeader}>{monthSection.month}</Text>
                   </View>
-                  <Text style={styles.monthHeader}>{monthSection.month}</Text>
-                </View>
 
-                {/* Render Plans for the Month */}
-                {monthSection.data.map((plan, index) => (
-                  <View key={plan.id} style={styles.planContainer}>
-                    {/* Plan Header with Ball and Line */}
-                    <View style={styles.planWrp}>
-                      <View style={styles.ballWrapper}>
-                        <View style={styles.ball2} />
+                  {/* Render Plans for the Month */}
+                  {monthSection.data.map((plan, index) => (
+                    <View key={plan.id} style={styles.planContainer}>
+                      {/* Plan Header with Ball and Line */}
+                      <View style={styles.planWrp}>
+                        <View style={styles.ballWrapper}>
+                          <View style={styles.ball2} />
+                        </View>
+                        <View style={styles.line} />
+                        <Text
+                          style={styles.planNum}
+                        >{`Plan ${index + 1}`}</Text>
                       </View>
-                      <View style={styles.line} />
-                      <Text style={styles.planNum}>{`Plan ${index + 1}`}</Text>
+                      <View style={styles.banner}>
+                        <EventBanner
+                          title={plan.description}
+                          number={plan.day}
+                          monthView
+                        />
+                      </View>
                     </View>
-                    <View style={styles.banner}>
-                      <EventBanner
-                        title={plan.description}
-                        number={plan.day}
-                        monthView
-                      />
-                    </View>
-                  </View>
-                ))}
+                  ))}
+                </View>
+              ))}
+            {((transformedData.length === 0 && !loading) || error) && (
+              <View style={styles.emptyCont}>
+                <Text style={styles.emptyTxt}>No Plans Available</Text>
+                <TouchableOpacity
+                  style={styles.emptyBtn}
+                  onPress={refreshPlans}
+                >
+                  <Text style={styles.emptyBtnTxt}>Reload</Text>
+                </TouchableOpacity>
               </View>
-            ))}
+            )}
+            {loading && (
+              <View style={styles.loader}>
+                <ActivityIndicator size="large" color={'#008080'} />
+              </View>
+            )}
           </View>
         </ScrollView>
       </View>
@@ -338,5 +349,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  emptyCont: {
+    paddingHorizontal: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  emptyTxt: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  emptyBtn: {
+    marginTop: 10,
+    backgroundColor: '#008080',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderRadius: 8,
+  },
+  emptyBtnTxt: {
+    fontSize: 16,
+    color: '#fff',
   },
 });

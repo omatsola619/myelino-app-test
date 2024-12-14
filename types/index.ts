@@ -95,6 +95,7 @@ interface MonthDataPlan {
   month: string;
   day: string;
   description: string;
+  error: any;
 }
 
 export interface MonthSectionType {

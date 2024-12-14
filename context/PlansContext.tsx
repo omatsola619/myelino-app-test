@@ -11,6 +11,7 @@ export const PlansProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [plans, setPlans] = useState<PlanDataType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
 
   // Fetch plans and set them in context
   const refreshPlans = async () => {
@@ -20,6 +21,8 @@ export const PlansProvider: React.FC<{ children: React.ReactNode }> = ({
       setPlans(data);
     } catch (error) {
       console.error('Failed to refresh plans:', error);
+      // @ts-ignore
+      setError(error);
     } finally {
       setLoading(false);
     }
@@ -30,7 +33,10 @@ export const PlansProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   return (
-    <PlansContext.Provider value={{ plans, loading, setPlans, refreshPlans }}>
+    <PlansContext.Provider
+      // @ts-ignore
+      value={{ plans, loading, setPlans, refreshPlans, error }}
+    >
       {children}
     </PlansContext.Provider>
   );
