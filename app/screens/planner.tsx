@@ -109,7 +109,10 @@ export default function Planner() {
           {/*TODO: expires in 5 days section here */}
           <View style={styles.daysContainer}>
             <View style={styles.daysWrp}>
-              <View style={[styles.ball2, { backgroundColor: '#C8102E' }]} />
+              <View style={styles.ballWrapper}>
+                <View style={[styles.ball2, { backgroundColor: '#C8102E' }]} />
+              </View>
+
               <Text style={styles.daysTxt}>Expires in 5 days!</Text>
             </View>
             <View>
@@ -131,7 +134,9 @@ export default function Planner() {
               <View key={monthSection.month} style={styles.monthContainer}>
                 {/* Month Header with Ball */}
                 <View style={styles.monthTxt}>
-                  <View style={styles.ball1} />
+                  <View style={styles.ballWrapper}>
+                    <View style={styles.ball1} />
+                  </View>
                   <Text style={styles.monthHeader}>{monthSection.month}</Text>
                 </View>
 
@@ -140,7 +145,9 @@ export default function Planner() {
                   <View key={plan.id} style={styles.planContainer}>
                     {/* Plan Header with Ball and Line */}
                     <View style={styles.planWrp}>
-                      <View style={styles.ball2} />
+                      <View style={styles.ballWrapper}>
+                        <View style={styles.ball2} />
+                      </View>
                       <View style={styles.line} />
                       <Text style={styles.planNum}>{`Plan ${index + 1}`}</Text>
                     </View>
@@ -278,19 +285,19 @@ const styles = StyleSheet.create({
     height: 14,
     borderRadius: 50,
     backgroundColor: 'black',
-    borderWidth: 1,
-    borderColor: '#f3f3f3',
-    padding: 5,
   },
   ball2: {
     width: 14,
     height: 14,
     borderRadius: 50,
     backgroundColor: '#008080',
-    borderWidth: 1,
-    borderColor: '#f3f3f3',
-    padding: 5,
     paddingRight: 2,
+  },
+  ballWrapper: {
+    borderWidth: 1,
+    borderColor: '#999',
+    padding: 3,
+    borderRadius: 50,
   },
   line: {
     width: 20,

@@ -60,9 +60,11 @@ export default function QuickPlans() {
                 return (
                   <View key={index} style={styles.planContainer}>
                     <View style={styles.daysWrp}>
-                      <View
-                        style={[styles.ball2, { backgroundColor: '#C8102E' }]}
-                      />
+                      <View style={styles.ballWrapper}>
+                        <View
+                          style={[styles.ball2, { backgroundColor: '#C8102E' }]}
+                        />
+                      </View>
                       <Text style={styles.daysTxt}>
                         Expires in {daysRemaining} days!
                       </Text>
@@ -181,10 +183,13 @@ const styles = StyleSheet.create({
     height: 14,
     borderRadius: 50,
     backgroundColor: '#008080',
-    borderWidth: 1,
-    borderColor: '#f3f3f3',
-    padding: 5,
     paddingRight: 2,
+  },
+  ballWrapper: {
+    borderWidth: 1,
+    borderColor: '#999',
+    padding: 3,
+    borderRadius: 50,
   },
   cardsWrapper: {
     flexDirection: 'row',
