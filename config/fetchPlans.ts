@@ -18,7 +18,7 @@ export const fetchPlans = async (): Promise<PlanDataType> => {
     // cache new plans when fetched
     const plansData = response.data;
     await AsyncStorage.setItem(PLANS_KEY, JSON.stringify(plansData));
-
+    console.log('DDD', plansData);
     return plansData;
   } catch (error) {
     console.error('Error fetching plans', error);

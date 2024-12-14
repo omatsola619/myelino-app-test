@@ -50,3 +50,10 @@ export const myGreeting = () => {
     return 'Good Evening';
   }
 };
+
+export const calculateDaysRemaining = (date: string): number => {
+  const currentDate = new Date();
+  const expirationDate = new Date(date);
+  const timeDifference = expirationDate.getTime() - currentDate.getTime();
+  return Math.ceil(timeDifference / (1000 * 3600 * 24));
+};

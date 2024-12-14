@@ -13,8 +13,6 @@ import {
 import BackBtn from '../../assets/images/back-btn.svg';
 import SearchBtn from '../../assets/images/search.svg';
 import EventBanner from '@/components/EventBanner';
-import { fetchPlans } from '@/config/fetchPlans';
-import { PlanDataType } from '@/types';
 import {
   dateArrangedData,
   formattedDate,
@@ -25,33 +23,14 @@ import DaysRenderItem from '@/components/DaysRenderItem';
 import { AuthContext } from '@/context/AuthContext';
 import { useNavigation } from 'expo-router';
 import { Link } from 'expo-router';
+import { usePlans } from '@/hooks/usePlan';
 
 export default function Planner() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [plans, setPlans] = useState<PlanDataType | []>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { logout } = useContext(AuthContext);
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const getPlans = async () => {
-      try {
-        const data = await fetchPlans();
-        setPlans(data);
-      } catch (e) {
-        setError('error fetching plans');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getPlans();
-  }, []);
-
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
+  const { plans, loading } = usePlans();
 
   // @ts-ignore
   const transformedData = dateArrangedData(plans.monthData);
@@ -60,9 +39,17 @@ export default function Planner() {
     logout();
     navigation.reset({
       index: 0,
-      routes: [{ name: 'index' as never }], // Reset and navigate to the login screen
+      routes: [{ name: 'index' as never }],
     });
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color={'#008080'} />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -337,5 +324,10 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingHorizontal: 20,
+  },
+  loader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

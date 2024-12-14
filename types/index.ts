@@ -1,4 +1,5 @@
 import { ImageSourcePropType } from 'react-native';
+import React from 'react';
 
 export interface EventBannerProps {
   number: string;
@@ -106,4 +107,11 @@ export interface DaysLimitProps {
   people: number;
   amount: number;
   image: ImageSourcePropType | undefined;
+}
+
+export interface PlansContextType {
+  plans: PlanDataType | null;
+  setPlans: React.Dispatch<React.SetStateAction<PlanDataType | null>>;
+  loading: boolean;
+  refreshPlans: () => Promise<void>;
 }

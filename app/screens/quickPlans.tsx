@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   Pressable,
+  Image,
 } from 'react-native';
 import BackBtn from '../../assets/images/back-btn.svg';
 import { PlanDataType } from '@/types';
@@ -13,14 +14,32 @@ import { daysLimitData } from '@/data/dummyData';
 import { AuthContext } from '@/context/AuthContext';
 import { useNavigation, useRouter } from 'expo-router';
 import QuickPlanItems from '@/components/QuickPlanItems';
+import { fetchPlans } from '@/config/fetchPlans';
+import { calculateDaysRemaining } from '@/constants/dateArrangedData';
+import { usePlans } from '@/hooks/usePlan';
 
 export default function QuickPlans() {
-  const [plans, setPlans] = useState<PlanDataType | []>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const { logout } = useContext(AuthContext);
-  const navigation = useNavigation();
   const router = useRouter();
+  const { plans, loading } = usePlans();
+  console.log('222my real plans are', plans?.quickPlans);
+
+  // useEffect(() => {
+  //   const getPlans = async () => {
+  //     try {
+  //       const data = await fetchPlans();
+  //       setPlans(data);
+  //       console.log(data);
+  //     } catch (e) {
+  //       setError('error fetching plans');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //
+  //   getPlans();
+  // }, []);
+
+  console.log('my real plans are', plans);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -55,15 +74,48 @@ export default function QuickPlans() {
 
           {/*TODO: expires in 5 days section here */}
           <View style={styles.daysContainer}>
-            <View style={styles.daysWrp}>
-              <View style={[styles.ball2, { backgroundColor: '#C8102E' }]} />
-              <Text style={styles.daysTxt}>Expires in 5 days!</Text>
-            </View>
-            <View style={styles.cardsWrapper}>
-              {daysLimitData.map((item, index) => (
-                <QuickPlanItems key={index} item={item} />
-              ))}
-            </View>
+            {/*<View style={styles.daysWrp}>*/}
+            {/*  <View style={[styles.ball2, { backgroundColor: '#C8102E' }]} />*/}
+            {/*  <Text style={styles.daysTxt}>Expires in 5 days!</Text>*/}
+            {/*</View>*/}
+            {/*<View style={styles.cardsWrapper}>*/}
+            {/*  {daysLimitData.map((item, index) => (*/}
+            {/*    <QuickPlanItems key={index} item={item} />*/}
+            {/*  ))}*/}
+            {/*</View>*/}
+
+            <ScrollView style={styles.container2}>
+              {plans?.quickPlans.map((plan, index) => {
+                const daysRemaining = calculateDaysRemaining(plan.date);
+                return (
+                  <View key={index} style={styles.planContainer}>
+                    {daysRemaining === 5 && (
+                      <Text style={styles.expirationText}>
+                        <View style={styles.daysWrp}>
+                          <View
+                            style={[
+                              styles.ball2,
+                              { backgroundColor: '#C8102E' },
+                            ]}
+                          />
+                          <Text style={styles.daysTxt}>Expires in 5 days!</Text>
+                        </View>
+                      </Text>
+                    )}
+                    <View style={styles.photosContainer}>
+                      {plan.place?.photos.map((photo, index) => (
+                        <View key={index} style={styles.photoContainer}>
+                          <Image
+                            source={{ uri: photo.url }}
+                            style={styles.photo}
+                          />
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView>
           </View>
         </ScrollView>
       </View>
@@ -174,5 +226,35 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     padding: 10,
+  },
+
+  ///
+
+  container2: {
+    flex: 1,
+    padding: 10,
+  },
+  planContainer: {
+    marginBottom: 20,
+  },
+  expirationText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  photosContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  photoContainer: {
+    flex: 1,
+    marginRight: 10,
+  },
+  photo: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
   },
 });
