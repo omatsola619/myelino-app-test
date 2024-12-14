@@ -22,7 +22,7 @@ export default function QuickPlans() {
   // @ts-ignore
   const { plans, loading, refreshPlans, error } = usePlans();
 
-  console.log('OUR BIG PLANS ARE', plans?.quickPlans);
+  // console.log('OUR BIG PLANS ARE', plans);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -68,36 +68,38 @@ export default function QuickPlans() {
               {plans?.quickPlans.length !== 0 &&
                 plans?.quickPlans.map((plan, index) => {
                   const daysRemaining = calculateDaysRemaining(plan.date);
+                  if (plan.place !== null) {
+                    return (
+                      <View key={index} style={styles.planContainer}>
+                        <View style={styles.daysWrp}>
+                          <View style={styles.ballWrapper}>
+                            <View
+                              style={[
+                                styles.ball2,
+                                { backgroundColor: '#C8102E' },
+                              ]}
+                            />
+                          </View>
+                          <Text style={styles.daysTxt}>
+                            Expires in {daysRemaining} days!
+                          </Text>
+                        </View>
+                        <View style={styles.photosContainer}>
+                          {plan.place?.photos.map((photo, index) => (
+                            <View key={index} style={styles.photoContainer}>
+                              <Image
+                                source={{ uri: photo.url }}
+                                style={styles.photo}
+                              />
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    );
+                  }
                   // const itemObj = {
                   //   title:
                   // };
-                  return (
-                    <View key={index} style={styles.planContainer}>
-                      <View style={styles.daysWrp}>
-                        <View style={styles.ballWrapper}>
-                          <View
-                            style={[
-                              styles.ball2,
-                              { backgroundColor: '#C8102E' },
-                            ]}
-                          />
-                        </View>
-                        <Text style={styles.daysTxt}>
-                          Expires in {daysRemaining} days!
-                        </Text>
-                      </View>
-                      <View style={styles.photosContainer}>
-                        {plan.place?.photos.map((photo, index) => (
-                          <View key={index} style={styles.photoContainer}>
-                            <Image
-                              source={{ uri: photo.url }}
-                              style={styles.photo}
-                            />
-                          </View>
-                        ))}
-                      </View>
-                    </View>
-                  );
                 })}
 
               {/*if there are no plans available display this */}

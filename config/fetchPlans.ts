@@ -6,22 +6,35 @@ const PLANS_KEY = 'cachedPlans';
 
 export const fetchPlans = async (): Promise<PlanDataType> => {
   try {
-    // check for any cached plans
+    // Fetch fresh data from the server
+    const response = await axiosClient.get('/plan');
+    const plansData = response.data;
+
+    // Retrieve cached data
+    const cachedPlans = await AsyncStorage.getItem(PLANS_KEY);
+
+    if (cachedPlans) {
+      const parsedCachedPlans = JSON.parse(cachedPlans);
+
+      // Compare cached and fresh data, update only if different
+      if (JSON.stringify(parsedCachedPlans) !== JSON.stringify(plansData)) {
+        await AsyncStorage.setItem(PLANS_KEY, JSON.stringify(plansData));
+      }
+    } else {
+      // No cached plans, set the fresh data in the cache
+      await AsyncStorage.setItem(PLANS_KEY, JSON.stringify(plansData));
+    }
+
+    return plansData;
+  } catch (error) {
+    console.error('Error fetching plans:', error);
+
+    // Fallback to cached data if available
     const cachedPlans = await AsyncStorage.getItem(PLANS_KEY);
     if (cachedPlans) {
       return JSON.parse(cachedPlans);
     }
 
-    // if there are no plans cached already
-    const response = await axiosClient.get('/plan');
-
-    // cache new plans when fetched
-    const plansData = response.data;
-    await AsyncStorage.setItem(PLANS_KEY, JSON.stringify(plansData));
-    console.log('DDD', plansData);
-    return plansData;
-  } catch (error) {
-    console.error('Error fetching plans', error);
     throw error;
   }
 };

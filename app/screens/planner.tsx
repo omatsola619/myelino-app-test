@@ -36,7 +36,7 @@ export default function Planner() {
   // @ts-ignore
   const { plans, loading, refreshPlans, error } = usePlans();
 
-  console.log('plans:', plans);
+  console.log('plans:', plans?.allplans[0].place);
 
   // @ts-ignore
   const transformedData = dateArrangedData(plans?.monthData);
