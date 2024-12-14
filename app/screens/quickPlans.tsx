@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -9,37 +9,15 @@ import {
   Image,
 } from 'react-native';
 import BackBtn from '../../assets/images/back-btn.svg';
-import { PlanDataType } from '@/types';
-import { daysLimitData } from '@/data/dummyData';
-import { AuthContext } from '@/context/AuthContext';
-import { useNavigation, useRouter } from 'expo-router';
-import QuickPlanItems from '@/components/QuickPlanItems';
-import { fetchPlans } from '@/config/fetchPlans';
+import { useRouter } from 'expo-router';
 import { calculateDaysRemaining } from '@/constants/dateArrangedData';
 import { usePlans } from '@/hooks/usePlan';
 
 export default function QuickPlans() {
   const router = useRouter();
   const { plans, loading } = usePlans();
-  console.log('222my real plans are', plans?.quickPlans);
 
-  // useEffect(() => {
-  //   const getPlans = async () => {
-  //     try {
-  //       const data = await fetchPlans();
-  //       setPlans(data);
-  //       console.log(data);
-  //     } catch (e) {
-  //       setError('error fetching plans');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //
-  //   getPlans();
-  // }, []);
-
-  console.log('my real plans are', plans);
+  console.log('OUR BIG PLANS ARE', plans?.quickPlans);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -72,36 +50,23 @@ export default function QuickPlans() {
             </View>
           </View>
 
-          {/*TODO: expires in 5 days section here */}
           <View style={styles.daysContainer}>
-            {/*<View style={styles.daysWrp}>*/}
-            {/*  <View style={[styles.ball2, { backgroundColor: '#C8102E' }]} />*/}
-            {/*  <Text style={styles.daysTxt}>Expires in 5 days!</Text>*/}
-            {/*</View>*/}
-            {/*<View style={styles.cardsWrapper}>*/}
-            {/*  {daysLimitData.map((item, index) => (*/}
-            {/*    <QuickPlanItems key={index} item={item} />*/}
-            {/*  ))}*/}
-            {/*</View>*/}
-
             <ScrollView style={styles.container2}>
               {plans?.quickPlans.map((plan, index) => {
                 const daysRemaining = calculateDaysRemaining(plan.date);
+                // const itemObj = {
+                //   title:
+                // };
                 return (
                   <View key={index} style={styles.planContainer}>
-                    {daysRemaining === 5 && (
-                      <Text style={styles.expirationText}>
-                        <View style={styles.daysWrp}>
-                          <View
-                            style={[
-                              styles.ball2,
-                              { backgroundColor: '#C8102E' },
-                            ]}
-                          />
-                          <Text style={styles.daysTxt}>Expires in 5 days!</Text>
-                        </View>
+                    <View style={styles.daysWrp}>
+                      <View
+                        style={[styles.ball2, { backgroundColor: '#C8102E' }]}
+                      />
+                      <Text style={styles.daysTxt}>
+                        Expires in {daysRemaining} days!
                       </Text>
-                    )}
+                    </View>
                     <View style={styles.photosContainer}>
                       {plan.place?.photos.map((photo, index) => (
                         <View key={index} style={styles.photoContainer}>
@@ -227,12 +192,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 10,
   },
-
-  ///
-
   container2: {
     flex: 1,
-    padding: 10,
   },
   planContainer: {
     marginBottom: 20,
@@ -247,6 +208,7 @@ const styles = StyleSheet.create({
   photosContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
   photoContainer: {
     flex: 1,

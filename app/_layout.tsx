@@ -48,6 +48,7 @@ export default function RootLayout() {
             initialRouteName="index"
             screenOptions={{
               headerShown: false,
+              animation: 'none',
             }}
           >
             <Stack.Screen name="index" options={{ headerShown: false }} />

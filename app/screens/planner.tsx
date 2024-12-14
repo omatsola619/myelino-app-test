@@ -32,6 +32,8 @@ export default function Planner() {
   const navigation = useNavigation();
   const { plans, loading } = usePlans();
 
+  console.log(' BIG plans are', plans);
+
   // @ts-ignore
   const transformedData = dateArrangedData(plans.monthData);
 
